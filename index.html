@@ -253,7 +253,7 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             font-weight: 600;
-            display: none;
+            display: none; /* Hidden by default */
         }
         
         #cheatMenuButton:hover {
@@ -773,14 +773,30 @@
         #ingame-info-display {
             position: absolute;
             top: 20px;
+            right: 20px;
+            left: auto; 
+            transform: none; 
+            text-align: right;
+            background: rgba(0,0,0,0.4);
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #ccc;
+            z-index: 10;
+        }
+
+        #game-timer-display {
+            position: absolute;
+            top: 20px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(0,0,0,0.4);
             padding: 8px 15px;
             border-radius: 10px;
-            font-size: 14px;
+            font-size: 18px;
+            font-weight: bold;
             text-align: center;
-            color: #ccc;
+            color: #f0f0f0;
             z-index: 10;
         }
 
@@ -1113,7 +1129,6 @@
             min-height: 20px;
         }
         
-        /* ==== MAIN MENU REDESIGN (v6.8) ==== */
         #main-menu-modal .modal-content {
              background: none;
              border: none;
@@ -1121,7 +1136,7 @@
              overflow: visible;
              align-items: stretch; 
              justify-content: stretch;
-             max-width: 1200px; /* MODIFIED: Widen the menu area */
+             max-width: 1200px;
         }
         
         .main-menu-layout {
@@ -1149,12 +1164,11 @@
             justify-content: center;
         }
 
-        /* NEW: Right Panel for Records */
         .main-menu-right-panel {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            align-items: center; /* Center content within the panel */
+            align-items: center;
             width: 25%;
             text-align: center;
         }
@@ -1209,7 +1223,7 @@
             transition: all 0.3s ease;
             position: relative;
             z-index: 1;
-            width: 100%; /* Make buttons full width of their panel */
+            width: 100%; 
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1234,7 +1248,6 @@
             text-align: left;
         }
 
-        /* ==== NOVA SEÇÃO DE RECORDES (v6.8) ==== */
         #best-record-display {
             background: rgba(40, 50, 90, 0.8);
             border: 2px solid #ffcc00;
@@ -1260,7 +1273,7 @@
         }
         #records-modal .modal-content {
             width: 90%;
-            max-width: 1200px; /* Widened for new columns */
+            max-width: 1200px; 
         }
 
         #records-table {
@@ -1284,7 +1297,6 @@
          #records-list-container::-webkit-scrollbar { width: 8px; }
          #records-list-container::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 4px; }
          #records-list-container::-webkit-scrollbar-thumb { background: #4caf50; border-radius: 4px; }
-        /* ==== FIM DA SEÇÃO DE RECORDES ==== */
 
          .selection-footer-buttons {
             display: flex;
@@ -1415,6 +1427,7 @@
     
     <!-- Elementos de UI do jogo -->
     <div id="ingame-info-display" style="display: none;"></div>
+    <div id="game-timer-display" style="display: none;">Tempo: 00:00</div>
     <div class="wave-indicator" id="wave-indicator">Onda: 0 | Inimigos: 0</div>
     <div class="boss-warning" id="boss-warning">CHEFE IMINENTE!</div>
     <div id="ingame-cards-ui"></div>
@@ -1473,6 +1486,41 @@
             <button id="changelog-close" class="cheat-button" style="position: absolute; top: 15px; right: 15px; width: auto; background: #f44336;">×</button>
             <h2>Notas de Atualização</h2>
             <div id="changelog-content">
+                <h3>[v7.9] – Resgate e Liberação (Melhoria da Comunidade)</h3>
+                <ul>
+                    <li><strong>Sistema de Resgate de Inimigos Aprimorado:</strong> Atendendo ao feedback, o sistema anti-frustração foi redesenhado para ser mais dinâmico.
+                        <ul>
+                            <li>Agora, em vez de serem destruídos, os inimigos presos são puxados para o topo da tela e **imediatamente liberados** para atacar o jogador, garantindo que a ação nunca pare.</li>
+                            <li>Inimigos são **totalmente vulneráveis a dano durante o processo de resgate**, corrigindo um bug que os tornava invulneráveis enquanto eram puxados.</li>
+                            <li>A lógica de eliminação automática foi removida para favorecer uma experiência de jogo mais direta e focada no combate.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Atualização de Versão:</strong> A versão do jogo e do salvamento foi atualizada para `7.9` para incorporar as novas mudanças.</li>
+                </ul>
+                <hr style="margin: 20px 0; border-color: #4a5a9a;">
+                <h3>[v7.8] – Sistema Anti-Frustração e Correções Gerais</h3>
+                <ul>
+                    <li><strong>Novo Sistema de Resgate de Inimigos:</strong> Implementado um novo sistema "Anti-Frustração" para evitar que partidas fiquem travadas.
+                        <ul>
+                            <li>Se 1 inimigo permanecer vivo por mais de 5 segundos sem sofrer dano, ele será puxado gradualmente para o topo da tela.</li>
+                            <li>Se 2 inimigos permanecerem vivos por mais de 10 segundos sem sofrer dano, ambos serão puxados.</li>
+                            <li>Uma vez na área de resgate, se o inimigo não for atingido em um novo intervalo de tempo (10s para 1 inimigo, 5s para 2 inimigos), ele será destruído automaticamente, permitindo que a onda prossiga.</li>
+                            <li>Atacar um inimigo durante o processo de resgate cancela a ação e o devolve ao combate normal.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Correção de Bugs:</strong> Realizada uma revisão geral no código para corrigir pequenas inconsistências e melhorar a estabilidade, garantindo que as mecânicas das versões anteriores funcionem como esperado.</li>
+                    <li><strong>Atualização do Save:</strong> O formato de salvamento foi atualizado para a v7.8. Dados de versões anteriores serão resetados para garantir compatibilidade com as novas mecânicas.</li>
+                </ul>
+                <hr style="margin: 20px 0; border-color: #4a5a9a;">
+                <h3>[v7.7] – Correções Críticas e Aprimoramentos Visuais</h3>
+                <ul>
+                    <li><strong>Correção da Carta "Buraco Negro":</strong> O bug que fazia a carta "Buraco Negro" surgir no jogador em vez de no inimigo foi corrigido. Agora ela funciona conforme a descrição, criando um vórtice gravitacional no local do inimigo derrotado por acerto crítico, com todos os seus atributos (raio, duração, dano) escalando corretamente.</li>
+                    <li><strong>Melhoria no Resgate de Inimigos:</strong> O sistema de resgate de "inimigos fantasma" foi aperfeiçoado. Agora, apenas inimigos comprovadamente fora da tela são resgatados. Em vez de serem eliminados, eles são puxados de forma gradual para o topo do cenário e sua IA é reativada para que voltem a ser uma ameaça, tornando o jogo mais justo e dinâmico.</li>
+                    <li><strong>Reorganização da UI em Jogo:</strong> O cronômetro da partida agora tem uma posição central e dedicada no topo da tela. O painel de informações da partida foi movido para o canto superior direito para evitar sobreposição. O botão "Configurações" não aparece mais incorretamente durante as partidas.</li>
+                    <li><strong>Aprimoramentos Visuais de Cartas:</strong> Diversas cartas receberam novos ou melhores efeitos visuais para que seu impacto seja mais claro, incluindo rastros de fogo para "Catalisador", projéteis translúcidos para "Balas Fantasma", e outros polimentos que enriquecem a experiência de jogo.</li>
+                    <li><strong>Verificação Geral de Funcionalidade:</strong> Foi realizada uma revisão completa para garantir que todas as cartas funcionam como descrito.</li>
+                </ul>
+                <hr style="margin: 20px 0; border-color: #4a5a9a;">
                 <h3>[v7.6] – Polimento de Cartas e Correções de Gameplay</h3>
                 <ul>
                     <li><strong>Reformulação da Carta "Buraco Negro":</strong> A carta lendária agora cria um buraco negro no local do inimigo derrotado por um acerto crítico, em vez de no jogador. O buraco negro puxa inimigos próximos e causa dano contínuo (5% da vida máxima a cada 0,5s). Acumular a carta aumenta a chance de criação, o raio, a duração, o dano e a frequência do dano.</li>
@@ -1644,7 +1692,7 @@
         </div>
     </div>
     
-    <!-- 2. Main Menu Modal (v6.8 Redesign) -->
+    <!-- 2. Main Menu Modal -->
     <div id="main-menu-modal" class="ui-modal">
         <div class="modal-content">
             <div class="main-menu-layout">
@@ -1679,13 +1727,13 @@
                     <button id="show-info-button" class="main-menu-button">ℹ️ Informações</button>
                     <button id="tutorial-button" class="main-menu-button">📚 Tutorial</button>
                     <button id="show-settings" class="main-menu-button">⚙️ Configurações</button>
-                    <button id="changelog-button" class="main-menu-button">📜 Changelog [v7.6]</button>
+                    <button id="changelog-button" class="main-menu-button">📜 Changelog [v7.9]</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 3. Records Modal (v7.4 Update) -->
+    <!-- 3. Records Modal -->
     <div id="records-modal" class="ui-modal">
         <div class="modal-content">
             <button id="records-close" class="cheat-button" style="position: absolute; top: 15px; right: 15px; width: auto; background: #f44336;">×</button>
@@ -1761,7 +1809,7 @@
         </div>
     </div>
 
-    <!-- NEW MODALS for Difficulty and Game Mode -->
+    <!-- Modais de Seleção -->
     <div id="difficulty-modal" class="ui-modal">
         <div class="modal-content">
             <h2>Selecione a Dificuldade</h2>
@@ -1928,7 +1976,7 @@
         </div>
     </div>
 
-    <!-- MODAIS DE CONFIRMAÇÃO DO PAUSE MENU -->
+    <!-- Modais de Confirmação do Pause -->
     <div id="restart-confirmation-modal" class="ui-modal">
         <div class="modal-content">
             <h2 style="color: #ff9800;">Reiniciar Partida?</h2>
@@ -2065,7 +2113,7 @@ const CONFIG = {
     COLOR_ENEMY_PROJECTILE: '#ff4081',
     STAR_COUNT: 400,
     PARTICLE_COUNT: 20,
-    WAVE_SPAWN_COOLDOWN: 2000, // MODIFICADO: De 5000 para 2000
+    WAVE_SPAWN_COOLDOWN: 2000, 
     WAVE_ENEMY_MULTIPLIER: 1.5,
     COIN_DROP_CHANCE: 0.3, 
     WAVE_BONUS_COIN_MULTIPLIER: 2 
@@ -2429,13 +2477,13 @@ const ACHIEVEMENTS = [
     { id: 'money_face_unlock', name: 'Magnata', description: 'Ganhe 500 moedas em uma única partida.', rarity: 'rare', target: 500, type: 'coins_in_run', reward: 100, customizationReward: [{ type: 'face', id: 'face_money' }, { type: 'hat', id: 'hat_moneybag'}] },
     { id: 'sad_face_unlock', name: 'Quase lá', description: 'Morra em uma onda de chefe.', rarity: 'common', target: 1, type: 'death_on_boss_wave', reward: 20, customizationReward: { type: 'face', id: 'face_sad' } },
     { id: 'uwu_face_unlock', name: 'Amigo dos Animais', description: 'Tenha 6 pets de combate ao mesmo tempo.', rarity: 'epic', target: 6, type: 'stat_check', subtype: 'laserPet.count', reward: 150, customizationReward: { type: 'face', id: 'face_uwu' } },
-    { id: 'dizzy_face_unlock', name: 'Ricocheteador', description: 'Faça 50 projéteis rebaterem com a carta Ricochete.', rarity: 'uncommon', target: 50, type: 'ricochets', reward: 80, customizationReward: { type: 'face', id: 'face_dizzy' } },
+    { id: 'dizzy_face_unlock', name: 'Ricocheteador', description: 'Faça 50 projéteis rebaterem com la carta Ricochete.', rarity: 'uncommon', target: 50, type: 'ricochets', reward: 80, customizationReward: { type: 'face', id: 'face_dizzy' } },
     { id: 'rage_face_unlock', name: 'Fúria Implacável', description: 'Mate 20 inimigos enquanto estiver com o buff da carta Fúria ativo.', rarity: 'rare', target: 20, type: 'rage_kills', reward: 90, customizationReward: { type: 'face', id: 'face_rage' } },
     { id: 'error_face_unlock', name: 'Quebrador de Limites', description: 'Cause mais de 1000 de dano em um único acerto.', rarity: 'epic', target: 1000, type: 'single_hit_damage', reward: 200, customizationReward: { type: 'face', id: 'face_error' } },
 
     // --- CONQUISTAS DE FORMA (VFX E POLÍGONOS) ---
     { id: 'pentagon_shape_unlock', name: 'Penta-Kill', description: 'Mate 5 inimigos simultaneamente.', rarity: 'rare', target: 5, type: 'simultaneous_kills', reward: 150, customizationReward: { type: 'shape', id: 'shape_pentagon' } },
-    { id: 'hexagon_shape_unlock', name: 'Muralha', description: 'Bloqueie 25 projéteis com a Barreira em uma partida.', rarity: 'rare', target: 25, type: 'barrier_blocks', reward: 150, customizationReward: { type: 'shape', id: 'shape_hexagon' } },
+    { id: 'hexagon_shape_unlock', name: 'Muralha', description: 'Bloqueie 25 projéteis com la Barreira em uma partida.', rarity: 'rare', target: 25, type: 'barrier_blocks', reward: 150, customizationReward: { type: 'shape', id: 'shape_hexagon' } },
     { id: 'gear_shape_unlock', name: 'Metralhadora', description: 'Alcance uma cadência de 10 tiros por segundo.', rarity: 'epic', target: 100, type: 'attack_speed_milestone', reward: 200, customizationReward: { type: 'shape', id: 'shape_gear' } },
     { id: 'cross_shape_unlock', name: 'Curandeiro', description: 'Cure um total de 2000 de vida em uma partida.', rarity: 'rare', target: 2000, type: 'healing', reward: 150, customizationReward: { type: 'shape', id: 'shape_cross' } },
 
@@ -2450,7 +2498,7 @@ const ACHIEVEMENTS = [
     // Card / Stat Combos
     { id: 'crit_master', name: 'Mestre do Crítico', description: 'Alcance 100% de chance de crítico em uma partida.', rarity: 'epic', target: 1.0, type: 'stat_milestone', subtype: 'critChance', reward: 150 },
     { id: 'health_tank', name: 'Tanque Imortal', description: 'Alcance 500 de Vida Máxima em uma partida.', rarity: 'rare', target: 500, type: 'stat_milestone', subtype: 'maxHp', reward: 100 },
-    { id: 'glass_cannon_god', name: 'Deus de Vidro', description: 'Vença uma partida (100 ondas) com a carta Canhão de Vidro.', rarity: 'legendary', target: 1, type: 'win_with_card', subtype: 'GlassCannon', reward: 400 },
+    { id: 'glass_cannon_god', name: 'Deus de Vidro', description: 'Vença uma partida (100 ondas) com la carta Canhão de Vidro.', rarity: 'legendary', target: 1, type: 'win_with_card', subtype: 'GlassCannon', reward: 400 },
     { id: 'synergy_master', name: 'Mestre da Sinergia', description: 'Tenha Buraco Negro e Poço Gravitacional ao mesmo tempo.', rarity: 'epic', target: 1, type: 'card_combo', subtypes: ['Black Hole', 'GravityWell'], reward: 120 },
     { id: 'army_of_one', name: 'Exército de Um Homem Só', description: 'Tenha 6 pets e 3 clones de miragem ao mesmo tempo.', rarity: 'epic', target: 1, type: 'card_combo', subtypes: ['LaserPet', 'MirageClones'], reward: 150 },
     { id: 'pacifist_wave', name: 'Onda Pacifista', description: 'Complete uma onda após a onda 10 sem atirar (danos passivos permitidos).', rarity: 'rare', target: 1, type: 'no_shot_wave', reward: 100 },
@@ -2555,6 +2603,7 @@ const waveIndicator = document.getElementById('wave-indicator');
 const bossWarning = document.getElementById('boss-warning');
 const ingameCardsUI = document.getElementById('ingame-cards-ui');
 const ingameInfoDisplay = document.getElementById('ingame-info-display');
+const gameTimerDisplay = document.getElementById('game-timer-display');
 const cheatFeaturesConfirmationModal = document.getElementById('cheat-features-confirmation-modal');
 const confirmCheatFeaturesYes = document.getElementById('confirm-cheat-features-yes');
 const confirmCheatFeaturesNo = document.getElementById('confirm-cheat-features-no');
@@ -2656,7 +2705,6 @@ let gameManager = {
         rerollsThisRun: 0,
         deathsThisRun: 0,
     },
-    // Achievement Tracking Flags
     runFlags: {
         playerMovedHorizontally: false,
         tookDamageThisWave: false,
@@ -2666,7 +2714,6 @@ let gameManager = {
         bossSpawnTime: 0,
         currentThemeName: 'default',
         wavesInCurrentTheme: 0,
-        lastEnemiesStuckTimer: 0, // NOVO: Para o bug do inimigo fantasma
     },
     cheats: {
         immortality: false, autoFire: false, playerSpeed: 7, playerDamage: 5,
@@ -2698,7 +2745,7 @@ let bloodSplatters = [];
 let lastDamageWave = -1;
 let previousScreen = null;
 let previewAnimationId = null;
-let gameLoopId = null; // NOVO: Para controlar o loop de animação
+let gameLoopId = null; 
 
 // ===================================================================================
 // 4. CLASSES DE OBJETOS DO JOGO (MELHORADAS)
@@ -3280,30 +3327,29 @@ class Enemy extends Entity {
         this.specialTimer = this.specialCooldown;
         this.behaviorTimer = Math.random() * 3000 + 2000;
         
-        this.isBeingRescued = false; // NOVO: Para o bug do inimigo fantasma
-        this.noDamageSinceRescue = 0; // NOVO
+        // v7.8+ - Anti-Frustration System
+        this.lastDamageTime = 0;
+        this.isBeingRescued = false;
     } 
     update(dt, p) { 
         if (gameManager.cheats.freezeEnemies || this.isFrozen) return; 
 
-        // NOVO: Lógica de resgate de inimigo fantasma
+        // MODIFIED [v7.9]: Lógica de resgate simplificada.
         if (this.isBeingRescued) {
-            this.noDamageSinceRescue += dt;
-            if (this.noDamageSinceRescue > 10000) {
-                console.log("Stuck enemy automatically eliminated.");
-                this.die(false);
-                return;
-            }
             const targetX = CONFIG.WIDTH / 2;
-            const targetY = 100;
+            const targetY = 150;
             const dx = targetX - this.x;
             const dy = targetY - this.y;
             const dist = Math.hypot(dx, dy);
-            if (dist > 5) {
-                this.x += dx * 0.05; // Movimento gradual
-                this.y += dy * 0.05;
+            if (dist > 20) {
+                const pullSpeed = 5;
+                this.x += (dx / dist) * pullSpeed;
+                this.y += (dy / dist) * pullSpeed;
+            } else {
+                // Chegou ao destino. Libere o inimigo para sua IA normal.
+                this.isBeingRescued = false;
             }
-            return; // Ignora o resto do comportamento
+            return; // Interrompe o resto da IA enquanto está sendo puxado.
         }
 
 
@@ -3453,10 +3499,13 @@ class Enemy extends Entity {
         }
     }
     takeDamage(am, byPlayer=true, fromBlackHole=false){ 
+        // MODIFIED [v7.9]: Simplificado para sempre atualizar o tempo e cancelar o resgate.
+        this.isBeingRescued = false;
+        this.lastDamageTime = gameManager.gameTime;
+
         if (this.isAlly && byPlayer) { this.die(false); return; }
         if (this.isAlly && !byPlayer) return; 
         
-        this.noDamageSinceRescue = 0; // NOVO: Resetar o timer de resgate
         this.hp -= am; 
         
         if (byPlayer && player.stats.quantumEntanglement.enabled) {
@@ -3505,31 +3554,14 @@ class Enemy extends Entity {
             enemies.push(new Enemy(this.x - 10, this.y, 'grunt_mini'));
             enemies.push(new Enemy(this.x + 10, this.y, 'grunt_mini'));
         }
-
-        if (!wasAlly && player && player.stats.fragmentation && player.stats.fragmentation.enabled) { 
-            let fragKills = 0;
-            for (let i = 0; i < player.stats.fragmentation.count; i++) { 
-                const angle = Math.PI * 2 * (i / player.stats.fragmentation.count); 
-                const p = new Projectile(this.x+this.width/2, this.y+this.height/2, Math.cos(angle)*8, Math.sin(angle)*8, 3, false, 3, '#ff00ff', true, {});
-                projectiles.push(p);
-                enemies.forEach(e => {
-                    if (e.active && e !== this && (p.x > e.x && p.x < e.x + e.width && p.y > e.y && p.y < e.y + e.height)) {
-                        e.takeDamage(p.damage, p.isPlayer);
-                        if (!e.active) fragKills++;
-                    }
-                });
-            }
-            if (fragKills > gameManager.simultaneousKills) gameManager.simultaneousKills = fragKills;
-            checkAchievement('simultaneous_kills', gameManager.simultaneousKills);
-        }
-
+        
         if (wasAlly) {
             const healAmount = player.stats.maxHp * player.stats.tempAlliance.healBonus;
             player.hp = Math.min(player.stats.maxHp, player.hp + healAmount);
             gameManager.healingDoneThisRun += healAmount; checkAchievement('healing', gameManager.healingDoneThisRun);
             floatingTexts.push(new FloatingText(`+${Math.round(healAmount)}`, player.x, player.y, '#00ff00'));
         } else {
-            if (player.stats.tempAlliance && Math.random() < player.stats.tempAlliance.chance) {
+            if (player && player.stats.tempAlliance && Math.random() < player.stats.tempAlliance.chance) {
                 this.active = true; this.isAlly = true; this.hp = this.maxHp / 2; this.allyTimer = player.stats.tempAlliance.duration; 
                 checkAchievement('convert_enemy_type', this.type);
                 return;
@@ -3602,8 +3634,7 @@ class Projectile extends Entity {
             if ((this.x <= 0 && this.vx < 0) || (this.x >= canvas.width && this.vx > 0)) {
                 this.vx *= -1; this.ricochetBouncesLeft--; this.color = '#add8e6'; if(this.isPlayer) this.aimAtNearestEnemy(); gameManager.ricochetsThisRun++; checkAchievement('ricochets', gameManager.ricochetsThisRun);
             }
-            if ((this.y <= 0 && this.vy < 0) || (this.y + this.vy > getGroundHeightAt(this.x))) {
-                this.vy *= -1; this.ricochetBouncesLeft--; this.color = '#add8e6'; if(this.isPlayer) this.aimAtNearestEnemy(); gameManager.ricochetsThisRun++; checkAchievement('ricochets', gameManager.ricochetsThisRun);
+            if ((this.y <= 0 && this.vy < 0) || (this.y + this.vy > getGroundHeightAt(this.x))) {                this.vy *= -1; this.ricochetBouncesLeft--; this.color = '#add8e6'; if(this.isPlayer) this.aimAtNearestEnemy(); gameManager.ricochetsThisRun++; checkAchievement('ricochets', gameManager.ricochetsThisRun);
             }
         } else if (!this.isGhost) {
              if(this.x<0 || this.x>canvas.width || this.y<0 || this.y>canvas.height) this.active = false;
@@ -3630,7 +3661,7 @@ class Projectile extends Entity {
         const critSize = this.isCrit ? 1 + critStacks * 0.1 : 1;
         const effectIntensity = VISUAL_SETTINGS.cardEffectIntensity / 10;
         
-        // NOVO: Efeito de fogo para 'Catalyst'
+        // Efeito de fogo para 'Catalyst'
         if (this.isPlayer && this.pStats.catalyst?.stacks > 0) {
              if(VISUAL_SETTINGS.trailIntensity > 0) particles.push(new Particle(this.x, this.y, 0, 0, this.width * 2, 'rgba(255,100,0,0.2)', 200));
         }
@@ -3699,7 +3730,7 @@ class ExpOrb extends Entity {
                 const healAmount = 10;
                 p.hp=Math.min(p.stats.maxHp,p.hp+healAmount);
                 gameManager.healingDoneThisRun += healAmount; checkAchievement('healing', gameManager.healingDoneThisRun);
-                floatingTexts.push(new FloatingText('+10 HP', this.x, this.y, '#00ff00', 20)); 
+                floatingTexts.push(new FloatingText('+10 HP', this.x, this.y, '#00ff00', 20));
             } 
             else { p.addExp(this.value); floatingTexts.push(new FloatingText(`+${this.value} XP`, this.x, this.y, '#ffd700', 20)); } 
         } 
@@ -3986,6 +4017,7 @@ function createTetherEffect(x1, y1, x2, y2, color) {
 
 function startGame(restart = false) {
     if (gameLoopId) cancelAnimationFrame(gameLoopId);
+    gameLoopId = null;
     gameManager.running = false;
     stopMainMenuAnimations();
     
@@ -4008,9 +4040,10 @@ function startGame(restart = false) {
     canvas.style.display = 'block'; 
     pauseButton.style.display = 'block'; 
     if(VISUAL_SETTINGS.cheatFeaturesEnabled) cheatMenuButton.style.display = 'block';
-    if(VISUAL_SETTINGS.cheatFeaturesEnabled) settingsButton.style.display = 'block';
+    settingsButton.style.display = 'none';
     ingameCardsUI.style.display = 'block';
     ingameInfoDisplay.style.display = 'block';
+    gameTimerDisplay.style.display = 'block';
     
     controlsHint.textContent = gameManager.controlScheme === 'desktop' ? 'Controles: A/D ou Setas para mover, Espaço para pular, Mouse para atirar' : 'Controles: Use os joysticks para mover e atirar';
     
@@ -4023,7 +4056,6 @@ function startGame(restart = false) {
         frozenEnemiesThisRun: 0, healingDoneThisRun: 0, blackHoleKillsThisRun: 0, ricochetsThisRun: 0,
         rageKillsThisRun: 0, simultaneousKills: 0, barrierBlocks: 0, stationaryWaveCount: 0
     });
-    gameManager.runFlags.lastEnemiesStuckTimer = 0;
     gameManager.stats.killCounts = {}; gameManager.stats.criticalHitsThisRun = 0; gameManager.stats.rerollsThisRun = 0; gameManager.stats.deathsThisRun = 0;
     
     groundPath = generateSmoothGround(); platforms = generatePlatforms();
@@ -4168,10 +4200,16 @@ function waveManager(deltaTime) {
             for (let i = 0; i < totalEnemies; i++) {
                 const isFlying = Math.random() < 0.2;
                 const type = isFlying ? flyingEnemyTypes[Math.floor(Math.random() * flyingEnemyTypes.length)] : groundEnemyTypes[Math.floor(Math.random() * groundEnemyTypes.length)];
-                enemies.push(new Enemy(Math.random() * CONFIG.WIDTH, -50 - Math.random() * 100, type));
+                const newEnemy = new Enemy(Math.random() * CONFIG.WIDTH, -50 - Math.random() * 100, type);
+                newEnemy.lastDamageTime = gameManager.gameTime; // Inicia com o tempo atual
+                enemies.push(newEnemy);
             }
 
-            if (gameManager.wave % 5 === 0) enemies.push(new Enemy(CONFIG.WIDTH/2, -100, currentTheme.boss_type));
+            if (gameManager.wave % 5 === 0) {
+                const boss = new Enemy(CONFIG.WIDTH/2, -100, currentTheme.boss_type);
+                boss.lastDamageTime = gameManager.gameTime;
+                enemies.push(boss);
+            }
             
             floatingTexts.push(new FloatingText(`ONDA ${gameManager.wave} INICIADA!`, CONFIG.WIDTH/2, CONFIG.HEIGHT/2, '#ff5555', 40));
         } 
@@ -4179,22 +4217,20 @@ function waveManager(deltaTime) {
         const remainingEnemies = enemies.filter(e => e.active && !e.isAlly);
         waveIndicator.textContent = `Onda: ${gameManager.wave} | Inimigos: ${remainingEnemies.length}`;
         
-        // NOVO: Lógica do inimigo fantasma
-        if(remainingEnemies.length > 0 && remainingEnemies.length <= 3) {
-            gameManager.runFlags.lastEnemiesStuckTimer += deltaTime;
-            if (gameManager.runFlags.lastEnemiesStuckTimer > 3000) {
+        // MODIFICADO [v7.9]: Novo sistema "Resgate e Liberação"
+        if (remainingEnemies.length > 0 && remainingEnemies.length <= 2) {
+            const timeSinceLastDamage = gameManager.gameTime - Math.max(...remainingEnemies.map(e => e.lastDamageTime || 0), 0);
+            
+            const PULL_TRIGGER_TIME = (remainingEnemies.length === 1) ? 5000 : 10000;
+            
+            if (timeSinceLastDamage > PULL_TRIGGER_TIME) {
                 remainingEnemies.forEach(e => {
                     if (!e.isBeingRescued) {
-                        console.log("Stuck enemy rescue protocol initiated for:", e);
-                        e.isBeingRescued = true;
-                        e.noDamageSinceRescue = 0;
+                        e.isBeingRescued = true; // Inicia o processo de puxar
                     }
                 });
             }
-        } else {
-            gameManager.runFlags.lastEnemiesStuckTimer = 0;
         }
-
 
         if (remainingEnemies.length === 0) {
             gameManager.waveState = 'COOLDOWN'; gameManager.waveTimer = CONFIG.WAVE_SPAWN_COOLDOWN; 
@@ -4220,16 +4256,12 @@ function handleCollisions() {
                 if (e.active && !e.isAlly && (p.x > e.x && p.x < e.x + e.width && p.y > e.y && p.y < e.y + e.height)) { 
                     const hpBefore = e.hp;
                     
-                    // MODIFICADO: Lógica do Buraco Negro
                     if (p.isCrit && p.pStats.blackHole?.enabled && Math.random() < p.pStats.blackHole.chance) {
                         blackHoles.push(new BlackHole(e.x + e.width/2, e.y + e.height/2, p.pStats.blackHole));
                     }
 
                     e.takeDamage(p.damage, p.isPlayer);
-                    if(p.parentType === 'exploder' && e.hp <= 0 && hpBefore > 0) {
-                        gameManager.exploderKillsThisRun++;
-                        checkAchievement('exploder_kills', gameManager.exploderKillsThisRun);
-                    }
+                    
                     if (!e.active && hpBefore > 0) { simultaneousKillsThisFrame++; }
                     
                     if (p.pStats.chainLightning?.enabled && Math.random() < p.pStats.chainLightning.chance) {
@@ -4600,13 +4632,6 @@ function update(deltaTime) {
         handleCollisions(); waveManager(effectiveDeltaTime);
         updateThemeTransition(deltaTime);
 
-        for(let i = enemies.length - 1; i >= 0; i--) {
-            if(enemies[i].hp <= 0 && enemies[i].active) {
-                console.warn("Forcibly removing ghost enemy:", enemies[i]);
-                enemies[i].die(false);
-            }
-        }
-        
         enemies = enemies.filter(e => e.active); projectiles = projectiles.filter(p => p.active);
         particles = particles.filter(p => p.active); expOrbs = expOrbs.filter(p => p.active);
         floatingTexts = floatingTexts.filter(t => t.active); blackHoles = blackHoles.filter(b => b.active);
@@ -4682,22 +4707,23 @@ function drawGround() {
 }
 function drawUI() {
     if (!player) return;
-    ctx.font = "bold 20px 'Segoe UI'"; ctx.textAlign = 'center'; ctx.fillStyle = '#f0f0f0'; ctx.shadowColor = 'black'; ctx.shadowBlur = 8;
-    const m = Math.floor(gameManager.gameTime/60000), s = Math.floor(gameManager.gameTime%60000/1000);
-    ctx.fillText(`Tempo: ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`, CONFIG.WIDTH/2, 30);
-    ctx.shadowBlur = 0;
+    const m = Math.floor(gameManager.gameTime / 60000), s = Math.floor((gameManager.gameTime % 60000) / 1000);
+    gameTimerDisplay.textContent = `Tempo: ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+
     const barWidth = 250, barHeight = 18;
     ctx.fillStyle = 'rgba(0, 0, 0, 0.3)'; ctx.fillRect(10, 10, barWidth, barHeight);
     ctx.fillStyle = 'rgba(244, 67, 54, 0.8)'; ctx.fillRect(10, 10, barWidth * (player.hp / player.stats.maxHp), barHeight);
     ctx.fillStyle = 'rgba(0, 0, 0, 0.3)'; ctx.fillRect(10, 35, barWidth, barHeight);
     ctx.fillStyle = 'rgba(33, 150, 243, 0.8)'; ctx.fillRect(10, 35, barWidth * (player.exp / player.expToNextLevel), barHeight);
     ctx.fillStyle = '#f0f0f0'; ctx.font = "14px 'Segoe UI'"; ctx.textAlign = 'left';
+    ctx.shadowColor = 'black'; ctx.shadowBlur = 4;
     ctx.fillText(`HP: ${player.hp.toFixed(0)}/${player.stats.maxHp.toFixed(0)}`, 15, 25);
     ctx.fillText(`LV: ${player.level} (${((player.exp / player.expToNextLevel)*100).toFixed(0)}%)`, 15, 50);
     ctx.fillText(`Moedas (Sessão): ${gameManager.coinsInRun}`, 15, 75); 
+    ctx.shadowBlur = 0;
     if (gameManager.cheats.immortality || gameManager.cheats.autoFire || gameManager.cheats.freezeEnemies) {
         ctx.fillStyle = '#ff5555'; ctx.font = "bold 16px 'Segoe UI'"; ctx.textAlign = 'right';
-        ctx.fillText('CHEATS ATIVADOS', CONFIG.WIDTH - 20, 25);
+        ctx.fillText('CHEATS ATIVADOS', CONFIG.WIDTH - 20, 50);
     }
 }
 function drawPlayerNametag(ctx, p) {
@@ -4895,6 +4921,7 @@ function showMainMenu() {
     gameManager.running = false; gameManager.paused = false; gameManager.victory = false;
     ingameCardsUI.style.display = 'none';
     ingameInfoDisplay.style.display = 'none';
+    gameTimerDisplay.style.display = 'none';
     cheatMenuButton.style.display = 'none';
     settingsButton.style.display = 'none';
     document.querySelectorAll('.ui-modal').forEach(modal => modal.style.display = 'none');
@@ -5046,7 +5073,7 @@ pauseRestartButton.addEventListener('click', () => {
 confirmRestartYes.addEventListener('click', () => {
     saveCurrentRunAsRecord();
     restartConfirmationModal.style.display = 'none';
-    startGame(true); // MODIFICADO: Passa true para reiniciar
+    startGame(true); 
 });
 confirmRestartNo.addEventListener('click', () => {
     restartConfirmationModal.style.display = 'none';
@@ -5407,7 +5434,7 @@ function handlePermanentUpgradePurchase(key) {
 function saveGameData() {
     try {
         const saveData = {
-            version: 7.6,
+            version: 7.9,
             coins: gameManager.stats.coins, totalSpent: gameManager.stats.totalSpent, totalWins: gameManager.stats.totalWins,
             totalHealing: gameManager.stats.totalHealing || 0,
             firstPurchaseMade: gameManager.stats.firstPurchaseMade || false,
@@ -5432,7 +5459,7 @@ function loadGameData() {
                  localStorage.removeItem('cubeChaosSave');
                  return false;
             }
-            if (data.version < 7.6) { 
+            if (data.version < 7.9) { 
                  console.log("Save data from old version ("+ (data.version || 'N/A') +"), resetting for new features.");
                  localStorage.removeItem('cubeChaosSave');
                  return false;
